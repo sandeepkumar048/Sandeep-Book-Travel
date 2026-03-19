@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Book your Ticket</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* Colourful theme */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root{
+            --bg1: #ff9a9e;
+            --bg2: #fad0c4;
+            --card-grad-a: rgba(255,255,255,0.10);
+            --card-grad-b: rgba(255,255,255,0.04);
+            --accent: #6a11cb;
+            --accent2: #2575fc;
+            --muted: #50535a;
+            --success: #16a34a;
+            --glass: rgba(255,255,255,0.12);
+            --glass-border: rgba(255,255,255,0.18);
+            --shadow: 0 8px 30px rgba(30,30,60,0.12);
+        }
+
+        html,body{
+            height:100%;
+            margin:0;
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, #a18cd1 100%);
+            color:#0b1220;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:32px;
+        }
+
+        .container{
+            max-width:980px;
+            margin:0 auto;
+            display:grid;
+            grid-template-columns: 1fr 420px;
+            gap:28px;
+            align-items:start;
+        }
+
+        header{
+            grid-column:1/-1;
+            display:flex;
+            gap:16px;
+            align-items:center;
+            margin-bottom:8px;
+        }
+
+        .logo {
+            width:64px;
+            height:64px;
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-weight:700;
+            background: linear-gradient(135deg,var(--accent),var(--accent2));
+            box-shadow: 0 6px 20px rgba(67,56,202,0.28);
+            flex-shrink:0;
+        }
+
+        h1 {
+            margin:0;
+            font-size:20px;
+            color: #08122a;
+        }
+        p.lead { margin:4px 0 0; color:rgba(11,18,36,0.6); }
+
+        .card {
+            background: linear-gradient(180deg,var(--card-grad-a),var(--card-grad-b));
+            border-radius:14px;
+            padding:22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(6px) saturate(120%);
+        }
+
+        form { display:flex; flex-direction:column; gap:12px; }
+        label { font-size:13px; font-weight:600; color:var(--muted); }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, input[type="number"] {
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid rgba(10,10,20,0.06);
+            background: rgba(255,255,255,0.9);
+            outline:none;
+            font-size:14px;
+            color:#08122a;
+            transition:box-shadow .12s, transform .06s;
+        }
+        input:focus, select:focus {
+            box-shadow: 0 6px 18px rgba(37,117,252,0.14);
+            transform: translateY(-1px);
+            border-color: rgba(37,117,252,0.45);
+        }
+
+        .radios { display:flex; gap:10px; flex-wrap:wrap; }
+        .radios label {
+            display:inline-flex;
+            gap:8px;
+            align-items:center;
+            padding:8px 10px;
+            border-radius:999px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.82));
+            border:1px solid rgba(10,10,20,0.04);
+            font-weight:600;
+            cursor:pointer;
+            color:#102032;
+        }
+        .radios input[type="radio"] { accent-color: var(--accent2); }
+
+        .row { display:flex; gap:12px; }
+        .row > * { flex:1; }
+
+        .actions { display:flex; gap:10px; margin-top:8px; }
+        button[type="submit"], button[type="reset"] {
+            padding:10px 14px;
+            border-radius:10px;
+            border:0;
+            cursor:pointer;
+            color:white;
+            font-weight:600;
+            letter-spacing:0.2px;
+        }
+        button[type="submit"] {
+            background: linear-gradient(90deg,var(--accent),var(--accent2));
+            box-shadow: 0 8px 26px rgba(99,72,224,0.18);
+        }
+        button[type="reset"] {
+            background:linear-gradient(90deg,#f1f5f9,#e2e8f0);
+            color:#0b1220;
+            border:1px solid rgba(11,18,36,0.06);
+        }
+
+        #confirmation {
+            margin-top:12px;
+            padding:14px;
+            border-radius:10px;
+            display:none;
+            background: linear-gradient(90deg, rgba(22,163,74,0.12), rgba(37,117,252,0.06));
+            border:1px solid rgba(22,163,74,0.18);
+            color:#05261b;
+        }
+
+        .sidebar {
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .summary {
+            padding:18px;
+            border-radius:12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border:1px solid rgba(255,255,255,0.06);
+        }
+        .summary h3 { margin:0 0 8px 0; font-size:16px; color:#04122a; }
+        .summary p { margin:0; color:rgba(4,18,42,0.65); }
+
+        .error { color:#b00020; margin-top:6px; font-weight:600; }
+
+        footer { grid-column:1/-1; text-align:center; margin-top:18px; color:rgba(4,18,42,0.6); font-size:13px; }
+
+        /* Responsive */
+        @media (max-width:920px){
+            .container{ grid-template-columns: 1fr; padding:8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">SB</div>
+            <div>
+                <h1>Book your Ticket</h1>
+                <p class="lead">Quick, colourful and secure booking for your favourite destinations.</p>
+            </div>
+        </header>
+
+        <main class="card">
+            <form id="bookingForm" novalidate>
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" required placeholder="Your full name">
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="you@example.com">
+
+                <label for="contact">Contact (Phone)</label>
+                <input type="tel" id="contact" name="contact" required placeholder="+977-98XXXXXXXX" pattern="[\d\+\-\s]+">
+
+                <label>Choose your favourite destination</label>
+                <div class="radios" role="radiogroup" aria-label="Destinations">
+                    <label><input type="radio" name="destination" value="Chitwan" required> Chitwan</label>
+                    <label><input type="radio" name="destination" value="Pokhara"> Pokhara</label>
+                    <label><input type="radio" name="destination" value="Tilaurakot"> Tilaurakot</label>
+                    <label><input type="radio" name="destination" value="Lumbini"> Lumbini</label>
+                    <label><input type="radio" name="destination" value="Kathmandu"> Kathmandu</label>
+                </div>
+                </div>
+                </div>
+
+                <div class="column">
+                    <div>
+                        <label for="date">Travel date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div><br>
+                    <div>
+                        <label for="passengers">Passengers</label>
+                        <input type="number" id="passengers" name="passengers" min="1" value="1" required>
+                    </div><br>
+                </div>
+
+                <label for="seatClass">Class</label>
+                <select id="seatClass" name="seatClass">
+                    <option value="Economy">Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First">First</option>
+                </select>
+
+                <div class="actions">
+                    <button type="submit">Submit</button>
+                    <button type="reset">Reset</button>
+                </div>
+
+                <div id="formError" class="error" aria-live="polite"></div>
+                <div id="confirmation" aria-live="polite"></div>
+            </form>
+        </main>
+
+        <aside class="sidebar">
+            <div class="summary card">
+                <h3>Why book here?</h3>
+                <p>Fast confirmation, colourful UI and local booking demo. Your data is stored in your browser for this demo only.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top:0">Quick tips</h3>
+                <ul style="margin:8px 0 0 18px; color:rgba(4,18,42,0.7)">
+                    <li>Use a valid email to receive reference.</li>
+                    <li>Choose travel date today or later.</li>
+                    <li>Increase passengers as needed.</li>
+                </ul>
+            </div>
+        </aside>
+
+        <footer>
+            © Sandeep Book Travel — colourful booking demo
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            const form = document.getElementById('bookingForm');
+            const confirmation = document.getElementById('confirmation');
+            const formError = document.getElementById('formError');
+
+            function clearMessages() {
+                confirmation.style.display = 'none';
+                confirmation.innerHTML = '';
+                formError.textContent = '';
+            }
+
+            function validateHTML5() {
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return false;
+                }
+                return true;
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                clearMessages();
+
+                if (!validateHTML5()) return;
+
+                const data = {
+                    name: form.name.value.trim(),
+                    email: form.email.value.trim(),
+                    contact: form.contact.value.trim(),
+                    destination: (form.destination && form.destination.value) || '',
+                    date: form.date.value,
+                    passengers: Number(form.passengers.value),
+                    seatClass: form.seatClass.value,
+                    bookedAt: new Date().toISOString()
+                };
+
+                if (!data.destination) {
+                    formError.textContent = 'Please choose a destination.';
+                    return;
+                }
+                if (new Date(data.date) < new Date().setHours(0,0,0,0)) {
+                    formError.textContent = 'Travel date must be today or later.';
+                    return;
+                }
+
+                try {
+                    const key = 'bookings';
+                    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                    existing.push(data);
+                    localStorage.setItem(key, JSON.stringify(existing));
+                } catch (err) {
+                    console.warn('Could not save to localStorage', err);
+                }
+
+                confirmation.style.display = 'block';
+                confirmation.innerHTML = `
+                    <strong style="display:block; margin-bottom:6px; color:#08304a">Booking confirmed</strong>
+                    <p style="margin:0 0 8px">Thank you, ${escapeHtml(data.name)}. Your booking for <strong>${escapeHtml(data.destination)}</strong> on <strong>${escapeHtml(data.date)}</strong> has been received.</p>
+                    <ul style="margin:0 0 0 18px">
+                        <li>Passengers: ${data.passengers}</li>
+                        <li>Class: ${escapeHtml(data.seatClass)}</li>
+                        <li>Contact: ${escapeHtml(data.contact)}</li>
+                        <li>Reference: <code>${generateRef()}</code></li>
+                    </ul>
+                `;
+
+                form.reset();
+            });
+
+            function escapeHtml(s) {
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function generateRef() {
+                return 'BK' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            }
+        })();
+    </script>
+</body>
+</html>
